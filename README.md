@@ -6,8 +6,11 @@ It organizes projects in my homelab into clear categories based on the skills Iâ
 ---
 
 # Repository Structure
+- **TrueNAS** â†’ Network attached storage OS for my homelab
+  - VM setup in Proxmox
+  - ZFS pool creation and datasets
+  - SMB/NFS share configuration
 - **docker/** â†’ Containerized labs
-  - NAS (Nextcloud, Samba)
   - Media server (Jellyfin + Transmission/Deluge)
   - Gluetun VPN gateway
   - DNS + Ad blocker (Technitium DNS, Pi-hole)
@@ -29,7 +32,7 @@ It organizes projects in my homelab into clear categories based on the skills Iâ
 ## Tech Stack
 - **Infrastructure as Code:** Terraform, Ansible 
 - **Containerization:** Docker, Kubernetes (K3s) 
-- **Networking & Security:** Gluetun VPN, Technitium DNS, pfSense, OpenVAS, Security Onion 
+- **Networking & Security:** Gluetun VPN, Technitium DNS, pfSense, OpenVAS, Security Onion, NAS 
 - **Monitoring:** Prometheus, Grafana, Loki, ELK/Wazuh 
 - **Security Tools:** Kali Linux, Trivy, Docker Bench, Windows Server 2019 AD 
 - **Learning Platforms:** TryHackMe (Beginner + Blue Team paths)
