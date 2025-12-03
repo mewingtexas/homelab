@@ -10,11 +10,11 @@ It organizes projects in my homelab into clear categories based on the skills I�
   - VM setup in Proxmox
   - ZFS pool creation and datasets
   - SMB/NFS share configuration
-- **docker/** → Containerized labs
+- **docker** → Containerized labs
   - Media server (Jellyfin + Transmission/Deluge)
   - Gluetun VPN gateway
   - DNS + Ad blocker (Technitium DNS, Pi-hole)
-- **infosec-labs/** → Labs covering different areas of cybersecurity
+- **infosec-labs** → Labs covering different areas of cybersecurity
   - Kali penetration testing
   - Firewall (pfSense/OPNsense)
   - SIEM (Security Onion + Elastic Stack)
@@ -25,7 +25,7 @@ It organizes projects in my homelab into clear categories based on the skills I�
   - Terraform provisioning
   - Ansible automation
   - Kubernetes labs
-- **monitoring/** → Observability stack
+- **monitoring** → Observability stack
   - Prometheus + Grafana
   - Centralized logging (Loki/ELK)
 
