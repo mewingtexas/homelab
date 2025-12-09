@@ -1,0 +1,38 @@
+###############################################
+# HOMELAB ROOT .gitignore
+###############################################
+
+# --- Ignore NAS media storage (huge, non-reproducible) ---
+docker/nas/
+
+# --- Ignore all application runtime configs, logs & caches ---
+docker/**/config/*
+docker/**/logs/*
+docker/**/cache/*
+docker/**/tmp/*
+
+# --- Do not ignore .gitkeep files (used to track empty folders) ---
+!docker/**/config/.gitkeep
+
+# --- VPN credentials and secrets ---
+docker/gleutun-vpn/gluetun.env
+*.env
+*.key
+*.crt
+*.pem
+wireguard/*.conf
+
+# --- Ignore Docker volumes (if created locally) ---
+docker/volumes/
+
+# --- System / OS clutter ---
+.DS_Store
+Thumbs.db
+
+# --- Python cache ---
+__pycache__/
+*.pyc
+
+# --- Editor config ---
+.vscode/
+.idea/
