@@ -1,0 +1,132 @@
+services:
+  vpn:
+    image: qmcgaw/gluetun:latest
+    container_name: gluetun
+    cap_add:
+      - NET_ADMIN
+    restart: unless-stopped
+    ports:
+      - "8080:8080"          # qBittorrent Web UI
+      - "6881:6881"          # BitTorrent TCP
+      - "6881:6881/udp"      # BitTorrent UDP
+    environment:
+      - TZ=${TZ}
+      - VPN_SERVICE_PROVIDER=${VPN_SERVICE_PROVIDER}
+      - VPN_TYPE=${VPN_TYPE}
+      - WIREGUARD_PRIVATE_KEY=${WIREGUARD_PRIVATE_KEY}
+      - WIREGUARD_ADDRESSES=${WIREGUARD_ADDRESSES}
+      - WIREGUARD_DNS=${WIREGUARD_DNS}
+      - WIREGUARD_PUBLIC_KEY=${WIREGUARD_PUBLIC_KEY}
+      - WIREGUARD_ENDPOINT_IP=${WIREGUARD_ENDPOINT_IP}
+      - WIREGUARD_ENDPOINT_PORT=${WIREGUARD_ENDPOINT_PORT}
+      - WIREGUARD_ALLOWED_IPS=${WIREGUARD_ALLOWED_IPS}
+    volumes:
+      - ./gluetun:/gluetun
+
+  qbittorrent:
+    image: lscr.io/linuxserver/qbittorrent:latest
+    container_name: qbittorrent
+    restart: unless-stopped
+    network_mode: "service:vpn"
+    depends_on:
+      - vpn
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+      - WEBUI_PORT=8080
+    volumes:
+      - ./qbittorrent/config:/config
+      - /home/mewingtexas/homelab/docker/nas/downloads:/downloads
+
+
+  # ------------------------
+  # Jellyfin (no VPN)
+  # ------------------------
+  jellyfin:
+    image: lscr.io/linuxserver/jellyfin:latest
+    container_name: jellyfin
+    restart: unless-stopped
+    ports:
+      - "8096:8096"           # Jellyfin web UI
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/New_York
+    volumes:
+      - ./jellyfin/config:/config
+      - /home/mewingtexas/homelab/docker/nas:/media
+    depends_on:
+      - qbittorrent
+
+  # ------------------------
+  # Radarr (Movies)
+  # ------------------------
+  radarr:
+    image: lscr.io/linuxserver/radarr:latest
+    container_name: radarr
+    restart: unless-stopped
+    ports:
+      - "7878:7878"
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/New_York
+    volumes:
+      - ./radarr/config:/config
+      - /home/mewingtexas/homelab/docker/nas/movies:/movies
+      - /home/mewingtexas/homelab/docker/nas/downloads:/downloads
+
+  # ------------------------
+  # Sonarr (TV)
+  # ------------------------
+  sonarr:
+    image: lscr.io/linuxserver/sonarr:latest
+    container_name: sonarr
+    restart: unless-stopped
+    ports:
+      - "8989:8989"
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/New_York
+    volumes:
+      - ./sonarr/config:/config
+      - /home/mewingtexas/homelab/docker/nas/tv:/tv
+      - /home/mewingtexas/homelab/docker/nas/downloads:/downloads
+
+  # ------------------------
+  # Sonarr (Anime instance)
+  # ------------------------
+  sonarr-anime:
+    image: lscr.io/linuxserver/sonarr:latest
+    container_name: sonarr-anime
+    restart: unless-stopped
+    ports:
+      - "8990:8989"           # map different host port -> same internal 8989
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/New_York
+    volumes:
+      - ./sonarr-anime/config:/config
+      - /home/mewingtexas/homelab/docker/nas/anime:/anime
+      - /home/mewingtexas/homelab/docker/nas/downloads:/downloads
+
+  # ------------------------
+  # Prowlarr (indexers)
+  # ------------------------
+  prowlarr:
+    image: lscr.io/linuxserver/prowlarr:latest
+    container_name: prowlarr
+    restart: unless-stopped
+    ports:
+      - "9696:9696"
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/New_York
+    volumes:
+      - ./prowlarr/config:/config
+
+# No explicit networks: default bridge is fine for non-VPN services.

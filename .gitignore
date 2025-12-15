@@ -36,3 +36,16 @@ __pycache__/
 # --- Editor config ---
 .vscode/
 .idea/
+
+# --- Envionrnment / secrets
+.env
+*.env
+
+# Docker runtime state
+**/gluetun/
+**/qbittorrent/config/*
+**/jellyfin/config/*
+**/sonarr*/config/*
+**/radarr/config/*
+**/prowlarr/config/*
+!.gitkeep
